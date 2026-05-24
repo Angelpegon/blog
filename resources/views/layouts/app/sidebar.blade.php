@@ -7,6 +7,24 @@
                 'url' => route('dashboard'), //URL a la que apunta el enlace
                 'current' => request()->routeIs('dashboard'), //Determina si el enlace está activo basándose en la ruta actual
             ],
+            [
+                'name' => 'Categorías',
+                'icon' => 'folder',
+                'url' => route('admin.categories.index'),
+                'current' => request()->routeIs('admin.categories.*'),
+            ],
+            [
+                'name' => 'Posts',
+                'icon' => 'clipboard-document-check',
+                'url' => route('admin.posts.index'),
+                'current' => request()->routeIs('admin.posts.*'),
+            ],
+            [
+                'name' => 'Etiquetas',
+                'icon' => 'tag',
+                'url' => route('admin.tags.index'),
+                'current' => request()->routeIs('admin.tags.*'),
+            ],
         ],
     ];
 @endphp
@@ -97,6 +115,7 @@
     @endpersist
 
     @fluxScripts
+
 </body>
 
 </html>
