@@ -14,7 +14,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- importar SweetAlert2 -->
 
-@stack('css') // Permite agregar estilos adicionales desde las vistas que extienden este layout
+{{-- Permite agregar estilos adicionales desde las vistas que extienden este layout --}}
+@stack('css')
 
 @vite(['resources/css/app.css', 'resources/js/app.js'])
 @fluxAppearance

@@ -56,11 +56,10 @@
             <flux:textarea label="Resumen" name="excerpt" placeholder="Escriba el resumen del post">
                 {{ old('excerpt', $post->excerpt) }}
             </flux:textarea>
-            {{-- <flux:textarea label="Contenido" name="content" rows="16" placeholder="Escriba el contenido del post">
-                {{ old('content', $post->content) }}
-            </flux:textarea> --}}
             <div>
-                div
+                <p class="text-sm font-medium mb-1">Contenido</p>
+                <div id="editor">{!! old('content', $post->content) !!}</div>
+                <textarea name="content" id="content" class="hidden">{{ old('content', $post->content) }}</textarea>
             </div>
 
             <div>
@@ -104,7 +103,7 @@
         </div>
     </form>
 
-    @push('js') 
+    @push('js')
         <!-- Include the Quill library -->
         <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
 
@@ -112,6 +111,10 @@
         <script>
             const quill = new Quill('#editor', {
                 theme: 'snow'
+            });
+            quill.on('text-change', function() {
+                document.getElementById('content').value = quill.root
+                .innerHTML; // Sin .innerHTML se obtiene el texto sin formato
             });
         </script>
     @endpush <!-- Permite agregar scripts adicionales desde las vistas que extienden este layout -->
