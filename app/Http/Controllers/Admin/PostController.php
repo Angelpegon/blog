@@ -91,7 +91,6 @@ class PostController extends Controller
                 Storage::delete($post->image_path); // Eliminar la imagen anterior del disco
             }
             $data['image_path'] = Storage::put('posts', $request->image); // Guardar la imagen en el disco 'public' dentro de la carpeta 'posts'
-            // = $request->file('image')->store('posts', 'public'); // Guardar la imagen en el disco 'public' dentro de la carpeta 'posts'
         }
         $post->update($data); // Actualizar los datos de la publicación
         $post->tags()->sync($data['tags'] ?? []); // Sincronizar las etiquetas seleccionadas
@@ -108,6 +107,17 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        if ($post->image_path) {
+            Storage::delete($post->image_path); // Eliminar la imagen del disco
+        }
+
+        $post->delete();
+
+        session()->flash('swal', [
+            'icon' => 'success',
+            'title' => '¡Bien Hecho!',
+            'text' => 'La publicación se ha eliminado correctamente',
+        ]);
+        return redirect()->route('admin.posts.index');
     }
 }

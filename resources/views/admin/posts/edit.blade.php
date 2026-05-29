@@ -21,7 +21,6 @@
         @csrf
         @method('PUT')
         <div class="relative mb-2">
-
             <img id="imgPreview" class="w-full aspect-video object-cover object-center"
                 src="{{ $post->image_path ? Storage::url($post->image_path) : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMmyTPv4M5fFPvYLrMzMQcPD_VO34ByNjouQ&s' }}"
                 alt="Imagen del post">
