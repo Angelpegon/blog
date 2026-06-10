@@ -1,4 +1,7 @@
 <x-layouts::app>
+    <h1>
+        Posts
+    </h1>
     <div class="flex items-center justify-between mb-4">
         <flux:breadcrumbs>
             <flux:breadcrumbs.item :href="route('dashboard')">
