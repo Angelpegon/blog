@@ -15,6 +15,7 @@ class CategoryController extends Controller
     {
         $categories = Category::orderBy('id', 'desc')
             ->get();
+
         return view('admin.categories.index', compact('categories'));
     }
 
@@ -41,6 +42,7 @@ class CategoryController extends Controller
             'title' => '¡Bien Hecho!',
             'text' => 'La categoria se ha creado correctamente',
         ]);
+
         return redirect()->route('admin.categories.index');
     }
 
@@ -75,6 +77,7 @@ class CategoryController extends Controller
             'title' => '¡Bien Hecho!',
             'text' => 'La categoria se ha actualizado correctamente',
         ]);
+
         return redirect()->route('admin.categories.index');
     }
 
@@ -90,6 +93,7 @@ class CategoryController extends Controller
             'title' => '¡Bien Hecho!',
             'text' => 'La categoria se ha eliminado correctamente',
         ]);
+
         return redirect()->route('admin.categories.index');
     }
 }

@@ -9,6 +9,7 @@ use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rules\File;
 
 class PostController extends Controller
 {
@@ -19,6 +20,7 @@ class PostController extends Controller
     {
         $posts = Post::orderBy('id', 'desc')
             ->paginate();
+
         return view('admin.posts.index', compact('posts'));
     }
 
@@ -28,7 +30,9 @@ class PostController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view('admin.posts.create', compact('categories'));
+        $tags = Tag::all();
+
+        return view('admin.posts.create', compact('categories', 'tags'));
     }
 
     /**
@@ -40,15 +44,25 @@ class PostController extends Controller
             'title' => 'required',
             'slug' => 'required|unique:posts',
             'category_id' => 'required|exists:categories,id',
+            'excerpt' => 'nullable',
+            'content' => 'nullable',
+            'image' => ['nullable', File::image()->max('5mb')],
             'tags' => 'nullable|array',
+            'tags.*' => 'exists:tags,id',
         ]);
+        if ($request->hasFile('image')) {
+            $data['image_path'] = Storage::disk('public')->putFile('posts', $request->file('image')); // Guardar la imagen en el disco 'public' dentro de la carpeta 'posts'
+        }
         $data['user_id'] = Auth::id();
         $post = Post::create($data);
+        $post->tags()->sync($data['tags'] ?? []); // Sincronizar las etiquetas seleccionadas
+
         session()->flash('swal', [
             'icon' => 'success',
             'title' => '¡Publicación creada!',
             'text' => 'La publicación se ha creado correctamente.',
         ]);
+
         return redirect()->route('admin.posts.edit', $post);
     }
 
@@ -67,6 +81,7 @@ class PostController extends Controller
     {
         $categories = Category::all();
         $tags = Tag::all();
+
         return view('admin.posts.edit', compact('post', 'categories', 'tags'));
     }
 
@@ -77,20 +92,20 @@ class PostController extends Controller
     {
         $data = $request->validate([
             'title' => 'required',
-            'slug' => 'required|unique:posts,slug,' . $post->id,
+            'slug' => 'required|unique:posts,slug,'.$post->id,
             'category_id' => 'required|exists:categories,id',
             'excerpt' => 'nullable',
             'content' => 'nullable',
-            'image' => 'nullable|image',
+            'image' => ['nullable', File::image()->max('5mb')],
             'tags' => 'nullable|array',
             'tags.*' => 'exists:tags,id',
             'is_published' => 'required|boolean',
         ]);
         if ($request->hasFile('image')) { // Verificar si se ha subido una imagen
             if ($post->image_path) {
-                Storage::delete($post->image_path); // Eliminar la imagen anterior del disco
+                Storage::disk('public')->delete($post->image_path); // Eliminar la imagen anterior del disco
             }
-            $data['image_path'] = Storage::put('posts', $request->image); // Guardar la imagen en el disco 'public' dentro de la carpeta 'posts'
+            $data['image_path'] = Storage::disk('public')->putFile('posts', $request->file('image')); // Guardar la imagen en el disco 'public' dentro de la carpeta 'posts'
         }
         $post->update($data); // Actualizar los datos de la publicación
         $post->tags()->sync($data['tags'] ?? []); // Sincronizar las etiquetas seleccionadas
@@ -99,6 +114,7 @@ class PostController extends Controller
             'title' => '¡Publicación actualizada!',
             'text' => 'La publicación se ha actualizado correctamente.',
         ]);
+
         return redirect()->route('admin.posts.edit', $post);
     }
 
@@ -108,16 +124,17 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         if ($post->image_path) {
-            Storage::delete($post->image_path); // Eliminar la imagen del disco
+            Storage::disk('public')->delete($post->image_path); // Eliminar la imagen del disco
         }
 
-        $post->delete();
+        $post->forceDelete();
 
         session()->flash('swal', [
             'icon' => 'success',
             'title' => '¡Bien Hecho!',
             'text' => 'La publicación se ha eliminado correctamente',
         ]);
+
         return redirect()->route('admin.posts.index');
     }
 }

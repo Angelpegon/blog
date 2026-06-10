@@ -14,6 +14,7 @@ class TagController extends Controller
     public function index()
     {
         $tags = Tag::orderBy('id', 'desc')->get();
+
         return view('admin.tags.index', compact('tags'));
     }
 
@@ -39,6 +40,7 @@ class TagController extends Controller
             'title' => '¡Etiqueta creada!',
             'text' => 'La etiqueta se ha creado correctamente.',
         ]);
+
         return redirect()->route('admin.tags.index');
     }
 
@@ -64,7 +66,7 @@ class TagController extends Controller
     public function update(Request $request, Tag $tag)
     {
         $request->validate([
-            'name' => 'required|string|max:255|unique:tags,name,' . $tag->id,
+            'name' => 'required|string|max:255|unique:tags,name,'.$tag->id,
         ]);
         $tag->update($request->all());
         session()->flash('swal', [
@@ -72,6 +74,7 @@ class TagController extends Controller
             'title' => '¡Etiqueta actualizada!',
             'text' => 'La etiqueta se ha actualizado correctamente.',
         ]);
+
         return redirect()->route('admin.tags.edit', $tag);
     }
 
@@ -86,6 +89,7 @@ class TagController extends Controller
             'title' => '¡Etiqueta eliminada!',
             'text' => 'La etiqueta se ha eliminado correctamente.',
         ]);
+
         return redirect()->route('admin.tags.index');
     }
 }

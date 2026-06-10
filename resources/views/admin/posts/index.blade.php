@@ -23,7 +23,7 @@
                     <th scope="col" class="px-6 py-3 font-medium">
                         Nombre
                     </th>
-                    <th scope="col" class="px-6 py-3 font-medium" width="10px">
+                    <th scope="col" class="px-6 py-3 font-medium text-center" width="10px">
                         Opciones
                     </th>
                 </tr>
@@ -39,7 +39,7 @@
                         </td>
                         <td class="px-6 py-4">
                             <div class="flex space-x-2">
-                                <a href="{{ route('admin.posts.edit', $post ) }}" class="btn btn-blue text-xs">
+                                <a href="{{ route('admin.posts.edit', $post) }}" class="btn btn-blue text-xs">
                                     Editar
                                 </a>
                                 <form class="delete-form" action="{{ route('admin.posts.destroy', $post) }}"
@@ -76,7 +76,7 @@
                         confirmButtonText: "¡Sí, eliminar!",
                         cancelButtonText: "Cancelar"
                     }).then((result) => {
-                        if (result.isConfirmed){
+                        if (result.isConfirmed) {
                             form.submit();
                         }
                     });

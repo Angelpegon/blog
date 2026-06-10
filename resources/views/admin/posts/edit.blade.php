@@ -21,8 +21,7 @@
         @csrf
         @method('PUT')
         <div class="relative mb-2">
-            <img id="imgPreview" class="w-full aspect-video object-cover object-center"
-                src="{{ $post->image_path ? Storage::url($post->image_path) : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMmyTPv4M5fFPvYLrMzMQcPD_VO34ByNjouQ&s' }}"
+            <img id="imgPreview" class="w-full aspect-video object-cover object-center" src="{{ $post->image }}"
                 alt="Imagen del post">
             <div class="absolute top-8 right-8 font-bold">
                 <label>
@@ -62,7 +61,7 @@
             </div>
 
             <div>
-                <p class="text-sm font-medium mb-1">Estado</p>
+                <p class="text-sm font-medium mb-1">Etiquetas</p>
                 <ul>
                     @foreach ($tags as $tag)
                         <li>
@@ -113,7 +112,7 @@
             });
             quill.on('text-change', function() {
                 document.getElementById('content').value = quill.root
-                .innerHTML; // Sin .innerHTML se obtiene el texto sin formato
+                    .innerHTML; // Sin .innerHTML se obtiene el texto sin formato
             });
         </script>
     @endpush <!-- Permite agregar scripts adicionales desde las vistas que extienden este layout -->

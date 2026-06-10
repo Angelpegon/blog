@@ -15,9 +15,9 @@
     <div class="card">
         <form action="{{ route('admin.categories.store') }}" method="POST">
             @csrf
-
-            <flux:input label="Nombre" name="name" value="{{ old('name') }}" placeholder="Escriba el nombre de la categoria" />
-            <div class="flex justify-end mt-4" >
+            <flux:input label="Nombre" name="name" value="{{ old('name') }}"
+                placeholder="Escriba el nombre de la categoria" />
+            <div class="flex justify-end mt-4">
                 <flux:button type="submit" variant="primary">
                     Enviar
                 </flux:button>
